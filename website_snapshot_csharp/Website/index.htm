@@ -1,0 +1,49 @@
+﻿<!doctype html>
+<html>
+<head>
+    <title>0mq tutorial</title>
+    <script src="Scripts/jquery-1.6.4.min.js" type="text/javascript"></script>
+    <script src="Scripts/jquery.signalR-0.5.2.min.js" type="text/javascript"></script>
+</head>
+<body>
+  <textarea style= "display:block" id="urls" rows="10" cols="100">http://phantomjs.org
+http://phantomjs.org
+http://jquery.com
+http://dzone.com
+http://github.com
+</textarea>
+  <input type="button" id="process" value="process" />
+
+  <p id="loading" style="display:none">Loading...</p>
+  <ul id="result">
+  </ul>
+  
+  <script type="text/javascript">
+  $(function () {
+      var connection = $.connection('/url2img');
+      var $result = $('#result');
+      var $urls = $('#urls');
+      var $loading = $('#loading');
+
+      connection.received(function (image) {
+         $loading.hide();
+         $result.append('<li><img width="128px" height="128px" src="imgs/'+image+'"/></li>');
+      });
+      
+      connection.start();
+      
+      $("#process").click(function () {
+          $loading.show();
+          $result.empty();
+          var urls = $urls.val().split('\n');
+          for(var i=0, l=urls.length;i<l;i++){
+            var url = urls[i].replace(/^\s*/, "").replace(/\s*$/, "");
+            if(url){
+                connection.send(url);
+            }
+          }
+      });
+  });
+  </script>
+</body>
+</html>
