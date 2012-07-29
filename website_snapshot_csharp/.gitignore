@@ -37,4 +37,7 @@ obj/
 *.vspscc
 *.vssscc
 
+!/bin
+/bin/*
 !phantomjs.exe
+!render.coffee
